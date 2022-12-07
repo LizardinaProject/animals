@@ -34,6 +34,28 @@ class AnimalController extends Controller
     }
 
     /**
+     * Выводим списки всех животных
+     * @return json
+    */
+    public function list(){
+        try {
+            $allAnimals = Animal::with('kind_info')->get();
+            return ResponseService::sendJsonResponse(
+                true,
+                Response::HTTP_OK,
+                null,
+                $allAnimals
+            );
+        } catch (Exception $e) {
+            return ResponseService::sendJsonResponse(
+                false,
+                Response::HTTP_BAD_REQUEST,
+                ['message' => $e->getMessage()],
+            );
+        }
+    }
+
+    /**
      * Создаем новое животное и выводим на экран все созданные животные
      * @return json
     */

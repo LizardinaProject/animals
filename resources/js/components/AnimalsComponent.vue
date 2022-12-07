@@ -1,6 +1,8 @@
 <template>
     <div class="top_panel">
-        <div class="add_button" @click="show_animals_kind()"></div>
+        <div class="add_button" @click="show_animals_kind()">
+            <div class="plus">+</div>
+        </div>
         <div class="tabs">
             <div class="animal_icon" v-for="startAnimal in startAnimals">
                 <img :src="startAnimal.icon" @click="create_new_animal(startAnimal.id)">
@@ -14,7 +16,7 @@
                 :weight="createdAnimal.size"
                 @click="show_current_animal(createdAnimal.name)"
             >
-                <div>{{ createdAnimal.name }}</div>
+                <div class="animal_name">{{ createdAnimal.name }}</div>
             </div>
         </div>
         <div class="errors" v-if="errors">{{ errors }}</div>
@@ -55,16 +57,29 @@
                 }).then( (response) => {
                    console.log(response);
                 });
-           },
-           change_animals(){
+            },
+            change_animals(){
                 axios.post( "/api/update", {
                 }).then( (response) => {
                     if(response.data.status){
                         this.createdAnimals = response.data.data; 
                     }
                 });
-            }    
+            },
+            all_animals(){
+                axios.get( "/api/list", {
+                }).then((response) => {
+                    if(response.data.status){
+                        this.createdAnimals = response.data.data; 
+                    }else{
+                        this.errors = data.errors;
+                    }
+                });
+            }
         },
+        created: function(){
+            this.all_animals();
+        }, 
         mounted() {
             try {
                 this.interval = setInterval(this.change_animals, 5000);
@@ -74,6 +89,7 @@
         }
     }
 </script>
+
 <style scoped>
 .top_panel{
     display: flex;
@@ -84,6 +100,7 @@
     left: 0px;
     top: 0px;
     background: #3E2723;
+    border-radius: 100px;
 }
 .tabs{
     width: 236px;
@@ -102,5 +119,13 @@
     margin-top: 326px;
     flex-direction: row;
     gap: 50px;
+}
+.plus{
+    color: white;
+    margin: 8px 19px 0px 15px;
+    font-size: 28px;
+}
+.animal_name{
+    margin: 12px 0px 0px 53px
 }
 </style>

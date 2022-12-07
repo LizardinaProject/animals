@@ -16,5 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/animal_kinds', 'AnimalController@index');
 Route::get('/show', 'AnimalController@show');
+Route::get('/list', 'AnimalController@list');
 Route::post('/create', 'AnimalController@create');
 Route::post('/update', 'AnimalController@update');
